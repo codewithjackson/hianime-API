@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: hianime-api
+    env: docker
+    plan: free
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 60000
+      - key: RATE_LIMIT_LIMIT
+        value: 100
+      - key: ORIGIN
+        value: "*"
+      # Add Upstash Redis vars here if used
+      # - key: UPSTASH_REDIS_REST_URL
+      #   sync: false
+      # - key: UPSTASH_REDIS_REST_TOKEN
+      #   sync: false
