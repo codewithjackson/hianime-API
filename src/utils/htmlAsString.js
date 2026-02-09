@@ -32,15 +32,26 @@ export const htmlAsString = `
             background-color: var(--bg-color);
             color: var(--text-main);
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 20%);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1a1d26 0%, #0f1115 100%);
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         /* Navbar */
@@ -72,6 +83,7 @@ export const htmlAsString = `
             font-size: 0.875rem;
             font-weight: 500;
             border: 1px solid rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(4px);
         }
 
         .status-dot {
@@ -94,6 +106,7 @@ export const htmlAsString = `
             line-height: 1.1;
             margin-bottom: 1.5rem;
             letter-spacing: -1px;
+            text-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
         }
 
         .gradient-text {
@@ -121,7 +134,7 @@ export const htmlAsString = `
             border-radius: 12px;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 1rem;
         }
 
@@ -134,12 +147,14 @@ export const htmlAsString = `
         .btn-primary:hover {
             background: var(--primary-hover);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.23);
         }
 
         .btn-secondary {
             background: rgba(255, 255, 255, 0.05);
             color: white;
             border: 1px solid var(--card-border);
+            backdrop-filter: blur(4px);
         }
 
         .btn-secondary:hover {
@@ -160,13 +175,33 @@ export const htmlAsString = `
             border: 1px solid var(--card-border);
             border-radius: 16px;
             padding: 1.5rem;
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            transition: all 0.3s ease;
             backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+
+        .card:hover::before {
+            opacity: 1;
         }
 
         .method {
@@ -181,7 +216,6 @@ export const htmlAsString = `
         }
 
         .get { background: rgba(52, 211, 153, 0.15); color: #34d399; }
-        .post { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
 
         .endpoint-path {
             font-family: 'Monaco', 'Consolas', monospace;
@@ -237,6 +271,7 @@ export const htmlAsString = `
     </style>
 </head>
 <body>
+    <canvas id="canvas"></canvas>
     <div class="container">
         <nav>
             <div class="logo">Hianime API</div>
@@ -315,6 +350,143 @@ export const htmlAsString = `
             </p>
         </footer>
     </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        
+        // Configuration
+        const particleCount = 60;
+        const connectionDistance = 150;
+        const mouseDistance = 200;
+
+        let mouse = { x: null, y: null };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+            
+            // Update cards hover effect
+            for(const card of document.getElementsByClassName("card")) {
+                const rect = card.getBoundingClientRect(),
+                      x = e.clientX - rect.left,
+                      y = e.clientY - rect.top;
+                card.style.setProperty("--mouse-x", \`\${x}px\`);
+                card.style.setProperty("--mouse-y", \`\${y}px\`);
+            }
+        });
+
+        window.addEventListener('mouseleave', () => {
+             mouse.x = null;
+             mouse.y = null;
+        });
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initParticles();
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+                this.color = \`rgba(139, 92, 246, \${Math.random() * 0.5 + 0.1})\`; // purple tint
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Mouse interaction
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouseDistance) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (mouseDistance - distance) / mouseDistance;
+                        const directionX = forceDirectionX * force * 0.6;
+                        const directionY = forceDirectionY * force * 0.6;
+                        
+                        this.vx += directionX * 0.05;
+                        this.vy += directionY * 0.05;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Connect particles
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = \`rgba(139, 92, 246, \${1 - distance / connectionDistance})\`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+                
+                // Connect to mouse
+                if (mouse.x != null) {
+                    const dx = particles[i].x - mouse.x;
+                    const dy = particles[i].y - mouse.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < mouseDistance) {
+                         ctx.beginPath();
+                        ctx.strokeStyle = \`rgba(52, 211, 153, \${1 - distance / mouseDistance})\`; // Green tint for interaction
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+    </script>
 </body>
 </html>
 `;
