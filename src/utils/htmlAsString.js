@@ -1,365 +1,320 @@
 export const htmlAsString = `
-  <!doctype html>
-  <html lang="en">
-      <head>
-          <meta charset="UTF-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>hianime-API</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hianime API - Premium Anime Data</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f1115;
+            --card-bg: rgba(26, 29, 36, 0.6);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --text-main: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent-glow: rgba(139, 92, 246, 0.15);
+            --success: #10b981;
+        }
 
-          <style>
-              :root {
-                  --bg: #0b0e14;
-                  --card: #121826;
-                  --text: #e6e8ee;
-                  --muted: #9aa4bf;
-                  --accent: #7c7cff;
-                  --danger: #ff5c5c;
-                  --success: #2dd4bf;
-                  --border: #1e263a;
-              }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-              * {
-                  box-sizing: border-box;
-              }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 20%);
+        }
 
-              body {
-                  margin: 0;
-                  font-family:
-                      system-ui,
-                      -apple-system,
-                      BlinkMacSystemFont,
-                      "Segoe UI",
-                      Roboto,
-                      Ubuntu,
-                      "Helvetica Neue",
-                      sans-serif;
-                  background: radial-gradient(
-                      1200px 600px at top,
-                      #11162a,
-                      var(--bg)
-                  );
-                  color: var(--text);
-                  line-height: 1.6;
-              }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-              a {
-                  color: var(--accent);
-                  text-decoration: none;
-              }
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            margin-bottom: 4rem;
+        }
 
-              a:hover {
-                  text-decoration: underline;
-              }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
 
-              header {
-                  padding: 4rem 1.5rem 3rem;
-                  text-align: center;
-              }
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
 
-              header h1 {
-                  font-size: 3rem;
-                  margin-bottom: 0.5rem;
-                  letter-spacing: 0.5px;
-              }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success);
+        }
 
-              header p {
-                  max-width: 700px;
-                  margin: 0 auto;
-                  color: var(--muted);
-                  font-size: 1.1rem;
-              }
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
 
-              .badge {
-                  display: inline-block;
-                  margin-top: 1rem;
-                  padding: 0.35rem 0.7rem;
-                  border-radius: 999px;
-                  background: rgba(255, 92, 92, 0.15);
-                  color: var(--danger);
-                  font-size: 0.8rem;
-                  font-weight: 600;
-              }
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
 
-              main {
-                  max-width: 1100px;
-                  margin: 0 auto;
-                  padding: 0 1.5rem 4rem;
-              }
+        .gradient-text {
+            background: linear-gradient(135deg, #a78bfa 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-              .grid {
-                  display: grid;
-                  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-                  gap: 1.2rem;
-              }
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+        }
 
-              .card {
-                  background: linear-gradient(
-                      180deg,
-                      rgba(255, 255, 255, 0.02),
-                      rgba(255, 255, 255, 0)
-                  );
-                  border: 1px solid var(--border);
-                  border-radius: 14px;
-                  padding: 1.4rem;
-              }
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
 
-              .card h2 {
-                  margin-top: 0;
-                  font-size: 1.25rem;
-                  margin-bottom: 0.6rem;
-              }
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
 
-              .card p {
-                  color: var(--muted);
-                  margin: 0.3rem 0;
-              }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.39);
+        }
 
-              code {
-                  display: inline-block;
-                  background: #0a0f1f;
-                  border: 1px solid var(--border);
-                  border-radius: 6px;
-                  padding: 0.25rem 0.45rem;
-                  font-family:
-                      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-                      "Liberation Mono", monospace;
-                  font-size: 0.85rem;
-                  color: var(--success);
-              }
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
 
-              pre {
-                  background: #0a0f1f;
-                  border: 1px solid var(--border);
-                  border-radius: 12px;
-                  padding: 1rem;
-                  overflow-x: auto;
-                  margin: 0.8rem 0 0;
-              }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid var(--card-border);
+        }
 
-              pre code {
-                  display: block;
-                  padding: 0;
-                  border: none;
-                  color: #c7d2fe;
-              }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
 
-              .section {
-                  margin-top: 3rem;
-              }
+        /* Grid */
+        .endpoints-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
 
-              .section h2 {
-                  margin-bottom: 1rem;
-                  font-size: 1.6rem;
-              }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            backdrop-filter: blur(12px);
+        }
 
-              footer {
-                  border-top: 1px solid var(--border);
-                  padding: 2rem 1.5rem;
-                  text-align: center;
-                  color: var(--muted);
-                  font-size: 0.9rem;
-              }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
 
-              footer a {
-                  margin: 0 0.4rem;
-              }
-              .btn {
-                  background-color: #fff;
-                  color: #000;
-                  padding: 4px 8px;
-                  border-radius: 10px;
+        .method {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
 
-              }
-          </style>
-      </head>
+        .get { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+        .post { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
 
-      <body>
-          <header>
-              <h1>📺 hianime-API</h1>
-              <p>
-                  An unofficial REST API that scrapes anime data from
-                  <strong>hianimez.to</strong>. Built for developers who want
-                  anime data without dealing with scraping.
-              </p>
-              <div class="badge">UNOFFICIAL · SELF-HOST ONLY</div>
-              <div style="margin-top: 10px;">
-                  <button class="btn">
-                      <a style="color: black; font-weight: 500; font-size: 17px;" href="/doc"> SCALAR DOCS </a>
-                  </>
-                  <button class="btn">
-                      <a href="/swagger" style="color: black; font-weight: 500; font-size: 17px;" > SWAGGER DOCS </a>
-                  </>
-              </div>
-          </header>
+        .endpoint-path {
+            font-family: 'Monaco', 'Consolas', monospace;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
 
-          <main>
-              <section class="grid">
-                  <div class="card">
-                      <h2>🚀 Base URL</h2>
-                      <p>All endpoints are served under:</p>
-                      <p><code>/api/v1</code></p>
-                  </div>
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
 
-                  <div class="card">
-                      <h2>📦 Response Format</h2>
-                      <p>Every response follows a standard structure:</p>
-                      <pre><code>{
-      "success": true,
-      "data": {}
-    }</code></pre>
-                  </div>
+        /* Section Header */
+        .section-header {
+            margin: 4rem 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
 
-                  <div class="card">
-                      <h2>⚠️ Disclaimer</h2>
-                      <p>
-                          This API is not affiliated with hianimez.to. All content
-                          belongs to its original owners.
-                      </p>
-                      <p>
-                          Use for
-                          <strong>educational and personal</strong> purposes only.
-                      </p>
-                  </div>
-              </section>
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
 
-              <section class="section">
-                  <h2>📚 Core Endpoints</h2>
-                  <div class="grid">
-                      <div class="card">
-                          <h2>🏠 Home</h2>
-                          <p><code>GET /home</code></p>
-                          <p>Trending, spotlight, top airing, latest episodes.</p>
-                      </div>
+        /* Footer */
+        footer {
+            margin-top: 6rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: 0.9rem;
+        }
 
-                      <div class="card">
-                          <h2>🎬 Anime Details</h2>
-                          <p><code>GET /anime/{animeId}</code></p>
-                          <p>examples</p>
-                          <p><code>one-piece-100</code></p>
-                          <p><code>attack-on-titan-112</code></p>
-                          <p><code>code-geass-lelouch-of-the-rebellion-41</code></p>
-                          <p>Full metadata, episodes, recommendations.</p>
-                      </div>
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
 
-                      <div class="card">
-                          <h2>📃 Anime List</h2>
-                          <p><code>GET /{query}</code></p>
-                          <p>example</p>
-                          <p><code>
-                          top-airing
-                          </code></p>
-                          <p><code>
-                          most-popular
-                          </code></p>
-                          <p><code>
-                          most-favorite
-                          </code></p>
-                          <p><code>
-                          completed
-                          </code></p>
-                          <p><code>
-                          recently-added
-                          </code></p>
-                          <p><code>
-                          recently-updated
-                          </code></p>
-                          <p><code>
-                          top-upcoming
-                          </code></p>
-                          <p><code>
-                          subbed-anime
-                          </code></p>
-                          <p><code>
-                          dubbed-anime
-                          </code></p>
-                          <p><code>
-                          movie
-                          </code></p>
-                          <p><code>
-                      tv
-                          </code></p>
-                          <p><code>
-                          ova
-                          </code></p>
-                          <p><code>
-                          ona
-                          </code></p>
-                          <p><code>
-                          special
-                          </code></p>
-                          <p>Popular, top airing, movies, TV, OVA.</p>
-                      </div>
+        footer a:hover {
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .container { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">Hianime API</div>
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                <span>Operational</span>
+            </div>
+        </nav>
 
-                      <div class="card">
-                          <h2>🔤 AZ List</h2>
-                          <p><code>GET /az-list/{letter}</code></p>
-                          <p>AZ List</p>
-                      </div>
-                      <div class="card">
-                          <h2> 👊 genre</h2>
-                          <p><code>GET /genre/{genre}</code></p>
-                          <p>anime List By Genre.</p>
-                      </div>
-                      <div class="card">
-                          <h2>🔍 Search</h2>
-                          <p><code>GET /search?keyword=naruto</code></p>
-                          <p>Search anime with pagination & suggestions.</p>
-                      </div>
+        <section class="hero">
+            <h1>The Ultimate <span class="gradient-text">Anime API</span></h1>
+            <p class="subtitle">
+                A powerful, free, and open-source REST API to scrape anime data. 
+                Built for developers, by developers.
+            </p>
+            <div class="cta-group">
+                <a href="/doc" class="btn btn-primary">Try Interactive Docs</a>
+                <a href="https://github.com/codewithjackson/hianime-API" class="btn btn-secondary" target="_blank">View on GitHub</a>
+            </div>
+        </section>
 
-                      <div class="card">
-                          <h2>📺 Episodes</h2>
-                          <p><code>GET /episodes/{animeId}</code></p>
-                          <p>Episode list for a specific anime.</p>
-                      </div>
+        <div class="section-header">
+            <h2>Popular Endpoints</h2>
+            <span style="color: var(--text-secondary)">Base URL: /api/v1</span>
+        </div>
 
-                      <div class="card">
-                          <h2>▶️ Streaming</h2>
-                          <p>
-                              <code
-                                  >GET
-                                  /stream?id=EP_ID&server=vidcloud&type=sub</code
-                              >
-                          </p>
-                          <p>HLS streams, subtitles, intro/outro timestamps.</p>
-                      </div>
-                  </div>
-              </section>
+        <div class="endpoints-grid">
+            <!-- Home -->
+            <div class="card">
+                <span class="method get">GET</span>
+                <code class="endpoint-path">/home</code>
+                <p>Get trending anime, latest episodes, top airing, and spotlight data in one request.</p>
+            </div>
 
-              <section class="section">
-                  <h2>🔧 Quick Start</h2>
-                  <div class="card">
-                      <pre><code>git clone https://github.com/yahyaMomin/hianime-API.git
-    cd hianime-API
-    bun install
-    bun run dev</code></pre>
-                      <p>Server runs on <code>http://localhost:3030</code></p>
-                  </div>
-              </section>
-          </main>
+            <!-- Search -->
+            <div class="card">
+                <span class="method get">GET</span>
+                <code class="endpoint-path">/search?keyword={query}</code>
+                <p>Search for anime by title. Includes pagination and advanced filtering options.</p>
+            </div>
 
-          <footer>
-              <p>
-                  Built by
-                  <a href="https://github.com/yahyaMomin" target="_blank"
-                      >yahyaMomin</a
-                  >
-                  ·
-                  <a
-                      href="https://github.com/yahyaMomin/hianime-API"
-                      target="_blank"
-                  >
-                      GitHub
-                  </a>
-                  ·
-                  <a
-                      href="https://github.com/yahyaMomin/watanuki"
-                      target="_blank"
-                  >
-                      Frontend Example
-                  </a>
-              </p>
-              <p>⭐ Star the repo if it helped you</p>
-          </footer>
-      </body>
-  </html>
-  `;
+            <!-- Info -->
+            <div class="card">
+                <span class="method get">GET</span>
+                <code class="endpoint-path">/anime/{id}</code>
+                <p>Retrieve detailed information about a specific anime, including synopsis, cast, and episodes.</p>
+            </div>
+
+            <!-- Episodes -->
+            <div class="card">
+                <span class="method get">GET</span>
+                <code class="endpoint-path">/episodes/{id}</code>
+                <p>List all available episodes for a specific anime ID.</p>
+            </div>
+
+            <!-- Stream -->
+            <div class="card">
+                <span class="method get">GET</span>
+                <code class="endpoint-path">/stream?id={episodeId}</code>
+                <p>Fetch HLS streaming links, subtitles, and server options for playback.</p>
+            </div>
+
+            <!-- Schedule -->
+            <div class="card">
+                <span class="method get">GET</span>
+                <code class="endpoint-path">/schedule</code>
+                <p>Get the estimated airing schedule for upcoming anime episodes.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>
+                Unofficial API - Not affiliated with Hianime. 
+                <br>
+                Use responsibly. Created for educational purposes.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
+`;
