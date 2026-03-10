@@ -12,7 +12,7 @@ const TIMEOUT = 15000;
 const KEY_CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 
 const KEY_URL =
-  'https://raw.githubusercontent.com/ryanwtf88/megacloud-keys/refs/heads/master/key.txt';
+  'https://raw.githubusercontent.com/Rownd/hianime-api/main/src/modules/stream/parser/key.txt';
 
 const FALLBACK_PROVIDERS = [
   { name: 'megaplay', domain: 'megaplay.buzz' },
@@ -107,8 +107,9 @@ export default async function megacloud({ selectedServer, id }, retry = 0) {
       usedFallback,
     });
   } catch (err) {
-    console.error(err.message);
+    console.error(`Megacloud Error [${id}]: ${err.message}`);
     if (retry < MAX_RETRIES) {
+      console.log(`Retrying megacloud extraction (${retry + 1}/${MAX_RETRIES})...`);
       await backoff(retry);
       return megacloud({ selectedServer, id }, retry + 1);
     }
